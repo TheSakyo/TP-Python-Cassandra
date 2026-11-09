@@ -41,22 +41,16 @@ def generate_event(player_id: Optional[str] = None) -> dict:
         "game_version": random.choice(VERSIONS),
     }
 
-    # TODO 1 :
-    # Ajouter les champs spécifiques selon event_type.
-    #
-    # level_completed :
-    #   - level_id : "level-XX" (entre 1 et 20)
-    #   - duration_seconds : entier entre 30 et 900
-    #
-    # player_death :
-    #   - level_id : "level-XX" (entre 1 et 20)
-    #   - cause : enemy, fall, trap ou unknown
-    #
-    # game_error :
-    #   - error_code : NET_TIMEOUT, ASSET_MISSING ou AUTH_FAILED
-    #
-    # Les autres types d'événements peuvent conserver uniquement
-    # les champs communs.
+    if event_type == "level_completed":
+        event["level_id"] = "level-{0:02d}".format(random.randint(1, 20))
+        event["duration_seconds"] = random.randint(30, 900)
+    elif event_type == "player_death":
+        event["level_id"] = "level-{0:02d}".format(random.randint(1, 20))
+        event["cause"] = random.choice(["enemy", "fall", "trap", "unknown"])
+    elif event_type == "game_error":
+        event["error_code"] = random.choice(
+            ["NET_TIMEOUT", "ASSET_MISSING", "AUTH_FAILED"]
+        )
 
     return event
 
@@ -80,29 +74,22 @@ def write_events(
     events = [generate_event() for _ in range(count)]
 
     if corrupt and events:
-        # TODO 2 :
-        # Injecter des anomalies dans les événements générés :
-        # - événement 1 : supprimer le champ obligatoire player_id ;
-        # - événement 2 : remplacer occurred_at par "date-invalide" ;
-        # - événement 3 : remplacer event_type par "unknown_type" ;
-        # - événement 4 : forcer event_type à "level_completed" et
-        #   mettre duration_seconds à -10.
-        #
-        # Attention : vérifier qu'il y a suffisamment d'événements
-        # avant de modifier les index 1, 2 et 3.
-
-        pass
+        events[0].pop("player_id", None)
+        if len(events) > 1:
+            events[1]["occurred_at"] = "date-invalide"
+        if len(events) > 2:
+            events[2]["event_type"] = "unknown_type"
+        if len(events) > 3:
+            events[3]["event_type"] = "level_completed"
+            events[3]["level_id"] = "level-{0:02d}".format(random.randint(1, 20))
+            events[3]["duration_seconds"] = -10
 
     with target.open("w", encoding="utf-8") as file:
         for event in events:
-            file.write(json.dumps(event, ensure_ascii=False) + "\\n")
+            file.write(json.dumps(event, ensure_ascii=False) + "\n")
 
         if corrupt:
-            # TODO 3 :
-            # Ajouter une dernière ligne volontairement invalide en JSON.
-            # Exemple de ligne malformée : {"broken_json":
-
-            pass
+            file.write('{"broken_json":\n')
 
 
 if __name__ == "__main__":
