@@ -37,7 +37,6 @@ def rejection_rate(total: int, rejected: int) -> float:  # Calcule le taux de re
         return 0.0  # Un lot vide reçoit un taux de 0 %.
     return rejected * 100.0 / total  # Convertit la proportion rejetée en pourcentage.
 
-
 def summarize_events(events: list[dict]) -> dict:  # Calcule les indicateurs d'une liste d'événements.
     """Compte les types d'événements, niveaux terminés et erreurs par version."""
     summary = EventSummary()  # Crée des compteurs neufs pour cet appel.

@@ -16,7 +16,6 @@ import uuid  # Produit des identifiants uniques.
 from pathlib import Path  # Manipule le chemin de sortie indépendamment de l'OS.
 from typing import Optional  # Indique qu'un player_id peut être absent.
 
-
 EVENT_TYPES = [  # Types d'événement que le générateur sait produire.
     "session_started",  # Début de session.
     "level_completed",  # Niveau terminé.
@@ -26,7 +25,6 @@ EVENT_TYPES = [  # Types d'événement que le générateur sait produire.
 ]
 
 VERSIONS = ["1.4.1", "1.4.2", "1.5.0"]  # Versions possibles du jeu.
-
 
 def generate_event(player_id: Optional[str] = None) -> dict:  # Génère un événement complet.
     """Génère un événement de télémétrie synthétique."""
@@ -53,7 +51,6 @@ def generate_event(player_id: Optional[str] = None) -> dict:  # Génère un év�
         )  # Fin du choix du code d'erreur.
 
     return event  # Renvoie l'événement composé.
-
 
 def write_events(
     path: str = "data/events.jsonl",  # Fichier à écrire.
@@ -90,7 +87,6 @@ def write_events(
 
         if corrupt:  # Ajoute aussi une ligne que le parseur JSON ne pourra pas lire.
             file.write('{"broken_json":\n')  # Simule une erreur de syntaxe JSON.
-
 
 if __name__ == "__main__":  # Exécute ce bloc seulement si le fichier est lancé directement comme module.
     write_events()  # Génère les 1000 événements avec les paramètres par défaut.

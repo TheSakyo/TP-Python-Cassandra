@@ -6,7 +6,6 @@ import pytest  # Fournit les outils de test et les dossiers temporaires.
 
 from src.ingestion import ingest_file  # Importe la fonction d'ingestion testée.
 
-
 class FakeSession:  # Simule la session Cassandra sans contacter de base réelle.
     def __init__(self):  # Initialise l'état de la fausse session.
         self.prepared_queries = []  # Garde les requêtes préparées.
@@ -23,7 +22,6 @@ class FakeSession:  # Simule la session Cassandra sans contacter de base réelle
     def shutdown(self):  # Simule la fermeture de la session.
         self.closed = True  # Note que le code a bien fermé la session.
 
-
 class FakeCluster:  # Simule le cluster Cassandra du driver.
     def __init__(self, session):  # Reçoit la session simulée à réutiliser.
         self.session = session  # Stocke la session renvoyée par connect.
@@ -37,7 +35,6 @@ class FakeCluster:  # Simule le cluster Cassandra du driver.
 
     def shutdown(self):  # Simule la fermeture du cluster.
         self.closed = True  # Note que le code a bien fermé le cluster.
-
 
 def valid_event(event_type="session_started", event_id="evt-1"):  # Construit un événement valide personnalisable.
     event = {  # Commence par les champs communs obligatoires.
@@ -53,7 +50,6 @@ def valid_event(event_type="session_started", event_id="evt-1"):  # Construit un
     if event_type == "game_error":  # Les erreurs techniques ont un code explicatif.
         event["error_code"] = "NET_TIMEOUT"  # Ajoute le code d'erreur de test.
     return event  # Renvoie l'événement prêt à sérialiser.
-
 
 def test_ingest_file_inserts_valid_events_and_quarantines_invalid_lines(  # Vérifie ingestion, insertions et rejets.
     tmp_path, monkeypatch  # Fournit un dossier isolé et le remplacement des dépendances.

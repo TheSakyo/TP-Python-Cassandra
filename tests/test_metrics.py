@@ -2,7 +2,6 @@ import pytest  # Fournit les tests paramétrés et l'assertion d'exception.
 
 from src.metrics import rejection_rate, summarize_events  # Importe les indicateurs à vérifier.
 
-
 @pytest.mark.parametrize(  # Répète un même test avec plusieurs jeux de compteurs.
     ("total", "rejected", "expected"),  # Noms des valeurs injectées dans le test.
     [(0, 0, 0.0), (10, 0, 0.0), (10, 2, 20.0), (4, 4, 100.0)],  # Cas vide, aucun rejet, rejet partiel et rejet total.
@@ -10,12 +9,10 @@ from src.metrics import rejection_rate, summarize_events  # Importe les indicate
 def test_rejection_rate(total, rejected, expected):  # Vérifie le pourcentage de rejet.
     assert rejection_rate(total, rejected) == expected  # Compare le résultat au pourcentage attendu.
 
-
 @pytest.mark.parametrize("total,rejected", [(-1, 0), (2, -1), (2, 3)])  # Cas de compteurs impossibles.
 def test_rejection_rate_rejects_invalid_counts(total, rejected):  # Vérifie la gestion des compteurs incorrects.
     with pytest.raises(ValueError):  # Attend une erreur de valeur.
         rejection_rate(total, rejected)  # Le calcul doit refuser ces nombres.
-
 
 def test_summarize_events_counts_types_completions_and_errors_by_version():  # Vérifie les trois indicateurs métier.
     events = [  # Prépare des événements de plusieurs types et versions.
@@ -36,7 +33,6 @@ def test_summarize_events_counts_types_completions_and_errors_by_version():  # V
         "levels_completed": 2,  # Vérifie l'indicateur des niveaux terminés.
         "errors_by_version": {"1.4.2": 1, "1.5.0": 1},  # Vérifie les erreurs par version.
     }  # Termine le résumé attendu.
-
 
 def test_summarize_empty_events():  # Vérifie les valeurs initiales pour une liste vide.
     assert summarize_events([]) == {  # Un lot vide doit avoir des compteurs à zéro.

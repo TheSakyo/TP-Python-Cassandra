@@ -1,6 +1,5 @@
 from src.transformations import normalize_event  # Importe la fonction de transformation testée.
 
-
 def test_normalize_event_trims_common_strings_and_converts_to_utc():  # Vérifie le nettoyage des champs et des dates.
     event = {  # Prépare un événement avec des espaces et un fuseau UTC+2.
         "event_id": " evt-1 ",  # Identifiant entouré d'espaces.
@@ -21,7 +20,6 @@ def test_normalize_event_trims_common_strings_and_converts_to_utc():  # Vérifie
     assert normalized["occurred_at"] == "2026-11-09T08:00:00+00:00"  # Vérifie la conversion vers UTC.
     assert normalized["event_day"] == "2026-11-09"  # Vérifie le jour calculé pour Cassandra.
 
-
 def test_normalize_event_does_not_mutate_input():  # Vérifie que l'entrée initiale n'est pas modifiée.
     event = {"event_id": " evt-1 ", "occurred_at": "invalid"}  # Crée l'objet source.
 
@@ -29,7 +27,6 @@ def test_normalize_event_does_not_mutate_input():  # Vérifie que l'entrée init
 
     assert event["event_id"] == " evt-1 "  # L'original garde sa valeur avec espaces.
     assert normalized["event_id"] == "evt-1"  # La copie renvoie la valeur nettoyée.
-
 
 def test_invalid_timestamp_is_left_for_validator_to_reject():  # Vérifie qu'une mauvaise date n'est pas masquée.
     event = {"occurred_at": "date-invalide"}  # Crée un événement à date incorrecte.
